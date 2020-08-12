@@ -51,6 +51,7 @@ func sysNoCheckRoleRouter(r *gin.RouterGroup) {
 
 	v1.GET("/monitor/server", monitor.ServerInfo)
 	v1.GET("/getCaptcha", system.GenerateCaptchaHandler)
+	v1.GET("/setting", system.GenerateSetting)
 	v1.GET("/gen/preview/:tableId", Preview)
 	v1.GET("/gen/toproject/:tableId", GenCode)
 	v1.GET("/gen/todb/:tableId", GenMenuAndApi)

@@ -17,3 +17,7 @@ func GenerateCaptchaHandler(c *gin.Context) {
 		"msg":  "success",
 	})
 }
+
+func GenerateSetting(c *gin.Context) {
+	println(123, "setting")
+}
