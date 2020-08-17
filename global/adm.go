@@ -29,4 +29,3 @@ var (
 	DBLogger      *glog.Logger
 	RequestLogger *glog.Logger
 )
-

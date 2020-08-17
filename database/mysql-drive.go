@@ -1,11 +1,14 @@
 package database
 
 import (
-	_ "github.com/go-sql-driver/mysql" //加载mysql
+	_ "github.com/go-sql-driver/mysql" // 加载mysql
 	"github.com/jinzhu/gorm"
 	"go-admin/global"
 	"go-admin/tools"
 	"go-admin/tools/config"
+	"log"
+	"os"
+	"time"
 )
 
 type Mysql struct {
@@ -30,6 +33,12 @@ func (e *Mysql) Setup() {
 	}
 
 	global.Eloquent.LogMode(config.LoggerConfig.EnabledDB)
+	// 开启orm日志记录
+	global.Eloquent.LogMode(true)
+	global.Eloquent.DB().SetConnMaxLifetime(time.Minute)
+	global.Eloquent.DB().SetMaxIdleConns(100)
+	global.Eloquent.DB().SetMaxOpenConns(100)
+	global.Eloquent.SetLogger(gorm.Logger{log.New(os.Stdout, "\r\n", 0)})
 }
 
 // 打开数据库连接

@@ -18,7 +18,6 @@ func (u *Login) GetUser() (user SysUser, role SysRole, e error) {
 	if e != nil {
 		return
 	}
-	println(user.Password, "2222222", u.Password)
 	_, e = tools.CompareHashAndPassword(user.Password, u.Password)
 	if e != nil {
 		return

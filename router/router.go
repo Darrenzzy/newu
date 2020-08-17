@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/gin-gonic/gin"
+	"go-admin/apis/admin"
 	"go-admin/pkg/jwtauth"
 	jwt "go-admin/pkg/jwtauth"
 )
@@ -15,7 +16,20 @@ func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gi
 	// 需要认证的路由
 	examplesCheckRoleRouter(r, authMiddleware)
 
+	MemberRouter(r)
+	WorthRouter(r)
 	return r
+}
+
+func MemberRouter(r *gin.Engine) {
+	v1 := r.Group("/api/v1")
+	v1.GET("/memberList", admin.GetMemberList)
+}
+
+func WorthRouter(r *gin.Engine) {
+	v1 := r.Group("/api/v1")
+	v1.PUT("/updateNetWorth", admin.UpdateNetWorth)
+	v1.GET("/getNetWorth", admin.GetNetWorth)
 }
 
 // 无需认证的路由示例
