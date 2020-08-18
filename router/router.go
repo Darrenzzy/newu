@@ -10,7 +10,6 @@ import (
 
 // 路由示例
 func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gin.Engine {
-
 	// 无需认证的路由
 	examplesNoCheckRoleRouter(r)
 	// 需要认证的路由
@@ -21,15 +20,23 @@ func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gi
 	return r
 }
 
+// 用户管理
 func MemberRouter(r *gin.Engine) {
-	v1 := r.Group("/api/v1")
-	v1.GET("/memberList", admin.GetMemberList)
+	v1 := r.Group("/api/v1/member")
+	v1.GET("/data/:id", admin.GetMember)
+	v1.GET("/list", admin.GetMemberList)
+	v1.PUT("/", admin.UpdateMember)
+	v1.DELETE("/:id", admin.DeleteMember)
+	// v1.POST("/:id", admin.DeleteMember)
+
 }
 
+// 净值
 func WorthRouter(r *gin.Engine) {
-	v1 := r.Group("/api/v1")
-	v1.PUT("/updateNetWorth", admin.UpdateNetWorth)
-	v1.GET("/getNetWorth", admin.GetNetWorth)
+	v1 := r.Group("/api/v1/netWorth")
+	v1.PUT("/", admin.UpdateNetWorth)
+	v1.GET("/", admin.GetNetWorth)
+	v1.POST("/", admin.InsertNetWorth)
 }
 
 // 无需认证的路由示例

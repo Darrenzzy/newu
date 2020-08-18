@@ -5,6 +5,7 @@ import (
 	"go-admin/tools"
 	"go-admin/tools/app"
 	"go-admin/tools/captcha"
+	"net/http"
 )
 
 func GenerateCaptchaHandler(c *gin.Context) {
@@ -19,5 +20,7 @@ func GenerateCaptchaHandler(c *gin.Context) {
 }
 
 func GenerateSetting(c *gin.Context) {
-	println(123, "setting")
+	// println(123, "setting")
+	c.JSON(http.StatusOK, nil)
+
 }

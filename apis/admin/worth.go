@@ -35,3 +35,13 @@ func UpdateNetWorth(c *gin.Context) {
 	tools.HasError(err, "数据不存在", -1)
 	c.JSON(http.StatusOK, resp.ReturnOK())
 }
+
+func InsertNetWorth(c *gin.Context) {
+	var data models.NetWorth
+	err := c.BindWith(&data, binding.JSON)
+	tools.HasError(err, "非法数据格式", 500)
+	data.CreateBy = tools.GetUserIdStr(c)
+	id, err := data.Insert()
+	tools.HasError(err, "添加失败", 500)
+	app.OK(c, id, "添加成功")
+}
