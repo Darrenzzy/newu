@@ -1,6 +1,6 @@
 settings:
   application:
-    enabledp: false
+    enabledp: true
     host: 0.0.0.0
     mode: dev
     name: testApp

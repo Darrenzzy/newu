@@ -170,6 +170,41 @@ definitions:
       visible:
         type: string
     type: object
+  models.NetWorth:
+    properties:
+      build_before:
+        description: 成立以来(%)
+        type: string
+      code:
+        description: 基金代码
+        type: integer
+      create_by:
+        type: string
+      id;primary_key:
+        type: integer
+      last_year:
+        description: 近一年(%)
+        type: string
+      net_worth:
+        type: string
+      now_year:
+        description: 今年以来(%)
+        type: string
+      six_mouth:
+        description: 近六个月(%)
+        type: string
+      three_muoth:
+        description: 近三个月(%)
+        type: string
+      unit_worth:
+        description: 单位净值
+        type: string
+      update_by:
+        type: string
+      wond_name:
+        description: 基金名称
+        type: string
+    type: object
   models.Post:
     properties:
       createBy:
@@ -646,7 +681,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysConfig'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -805,7 +839,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysDept'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -832,7 +865,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysDept'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -919,8 +951,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/models.SysConfig'
-          type: object
+          $ref: '#/definitions/models.DictType'
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -928,9 +959,9 @@ paths:
             type: string
       security:
       - Bearer: []
-      summary: 添加配置
+      summary: 添加字典数据
       tags:
-      - 配置
+      - 字典数据
     put:
       consumes:
       - application/json
@@ -942,7 +973,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.DictType'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1053,7 +1083,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.DictType'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1075,7 +1104,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.DictType'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1167,7 +1195,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.LoginLog'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1189,7 +1216,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.LoginLog'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1269,6 +1295,56 @@ paths:
       summary: 登录日志列表
       tags:
       - 登录日志
+  /api/v1/member/login:
+    post:
+      parameters:
+      - description: 手机号„
+        in: query
+        name: mobile
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      responses:
+        "200":
+          description: '{"code": 200, "message": "登录成功"}'
+          schema:
+            type: string
+      summary: 会员登录
+      tags:
+      - 企业网站接口
+  /api/v1/member/register:
+    post:
+      parameters:
+      - description: 用户名
+        in: query
+        name: username
+        type: string
+      - description: 验证码
+        in: query
+        name: code
+        type: integer
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      - description: 手机号
+        in: query
+        name: mobile
+        type: string
+      - description: 邮箱
+        in: query
+        name: email
+        type: integer
+      responses:
+        "200":
+          description: '{"code": 200, "message": "注册成功"}'
+          schema:
+            type: string
+      summary: 会员注册
+      tags:
+      - 企业网站接口
   /api/v1/menu:
     get:
       description: 获取JSON
@@ -1364,7 +1440,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Menu'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "修改失败"}'
@@ -1446,6 +1521,26 @@ paths:
       summary: 根据角色名称获取菜单列表数据（左菜单使用）
       tags:
       - 菜单
+  /api/v1/netWorth/:
+    get:
+      description: 获取当前净值2
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.NetWorth'
+      responses:
+        "200":
+          description: '{"code": 200, "data": [...]}'
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - Bearer: []
+      summary: 获取当前净值
+      tags:
+      - 企业网站接口
   /api/v1/operlog:
     post:
       consumes:
@@ -1458,7 +1553,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysOperLog'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1580,7 +1674,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Post'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1603,7 +1696,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Post'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1682,7 +1774,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysRole'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1702,7 +1793,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysRole'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "修改失败"}'
@@ -1801,6 +1891,21 @@ paths:
       summary: 删除用户菜单数据
       tags:
       - 角色菜单
+  /api/v1/send_code:
+    get:
+      parameters:
+      - description: 手机号
+        in: query
+        name: mobile
+        type: string
+      responses:
+        "200":
+          description: '{"code": 200, "message": "发送成功"}'
+          schema:
+            type: string
+      summary: 发送验证码
+      tags:
+      - 企业网站接口
   /api/v1/sys/tables/info:
     post:
       consumes:
@@ -1832,7 +1937,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/tools.SysTables'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1926,7 +2030,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysUser'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -2000,7 +2103,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.SysUser'
-          type: object
       responses:
         "200":
           description: '{"code": -1, "message": "修改失败"}'
@@ -2059,12 +2161,9 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/models.Login'
-          type: object
       responses:
         "200":
-          description: '{"code": 200, "expire": "2019-08-07T12:45:48+08:00", "token":
-            ".eyJleHAiOjE1NjUxNTMxNDgsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTU2NTE0OTU0OH0.-zvzHvbg0A"
-            }'
+          description: '{"code": 200, "expire": "2019-08-07T12:45:48+08:00", "token": ".eyJleHAiOjE1NjUxNTMxNDgsImlkIjoiYWRtaW4iLCJvcmlnX2lhdCI6MTU2NTE0OTU0OH0.-zvzHvbg0A" }'
           schema:
             type: string
       summary: 登陆

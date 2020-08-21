@@ -10,7 +10,13 @@ import (
 	"net/http"
 )
 
-// 获取当前净值
+// @Summary 获取当前净值
+// @Description 获取当前净值2
+// @Tags 企业网站接口
+// @Param data body models.NetWorth true "body"
+// @Success 200 {object} app.Response "{"code": 200, "data": [...]}"
+// @Router /api/v1/netWorth/ [get]
+// @Security Bearer
 func GetNetWorth(c *gin.Context) {
 	var res models.NetWorth
 	var resp app.Response

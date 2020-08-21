@@ -17,6 +17,7 @@ func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gi
 
 	MemberRouter(r)
 	WorthRouter(r)
+	WebRouter(r)
 	return r
 }
 
@@ -27,7 +28,15 @@ func MemberRouter(r *gin.Engine) {
 	v1.GET("/list", admin.GetMemberList)
 	v1.PUT("/", admin.UpdateMember)
 	v1.DELETE("/:id", admin.DeleteMember)
-	// v1.POST("/:id", admin.DeleteMember)
+	v1.POST("/register", admin.RegisterMember)
+	v1.POST("/login", admin.Login)
+
+}
+
+// 企业网站 路由
+func WebRouter(r *gin.Engine) {
+	v1 := r.Group("/api/v1")
+	v1.GET("/sendCode", admin.SendCode)
 
 }
 

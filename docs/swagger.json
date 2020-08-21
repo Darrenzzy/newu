@@ -33,7 +33,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysConfig"
                         }
                     }
@@ -291,7 +290,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysDept"
                         }
                     }
@@ -326,7 +324,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysDept"
                         }
                     }
@@ -467,7 +464,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.DictType"
                         }
                     }
@@ -492,9 +488,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "配置"
+                    "字典数据"
                 ],
-                "summary": "添加配置",
+                "summary": "添加字典数据",
                 "parameters": [
                     {
                         "description": "data",
@@ -502,8 +498,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/models.SysConfig"
+                            "$ref": "#/definitions/models.DictType"
                         }
                     }
                 ],
@@ -679,7 +674,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.DictType"
                         }
                     }
@@ -714,7 +708,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.DictType"
                         }
                     }
@@ -860,7 +853,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.LoginLog"
                         }
                     }
@@ -895,7 +887,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.LoginLog"
                         }
                     }
@@ -1014,6 +1005,84 @@
                         "description": "{\"code\": 200, \"data\": [...]}",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/member/login": {
+            "post": {
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "会员登录",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "手机号„",
+                        "name": "mobile",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"message\": \"登录成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/member/register": {
+            "post": {
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "会员注册",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "验证码",
+                        "name": "code",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "手机号",
+                        "name": "mobile",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"message\": \"注册成功\"}",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -1144,7 +1213,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.Menu"
                         }
                     }
@@ -1300,6 +1368,39 @@
                 }
             }
         },
+        "/api/v1/netWorth/": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "获取当前净值2",
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "获取当前净值",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NetWorth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": [...]}",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/operlog": {
             "post": {
                 "security": [
@@ -1322,7 +1423,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysOperLog"
                         }
                     }
@@ -1516,7 +1616,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.Post"
                         }
                     }
@@ -1553,7 +1652,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.Post"
                         }
                     }
@@ -1674,7 +1772,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysRole"
                         }
                     }
@@ -1704,7 +1801,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysRole"
                         }
                     }
@@ -1861,6 +1957,30 @@
                 }
             }
         },
+        "/api/v1/send_code": {
+            "get": {
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "发送验证码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "手机号",
+                        "name": "mobile",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"message\": \"发送成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/sys/tables/info": {
             "put": {
                 "security": [
@@ -1883,7 +2003,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/tools.SysTables"
                         }
                     }
@@ -2058,7 +2177,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysUser"
                         }
                     }
@@ -2151,7 +2269,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.SysUser"
                         }
                     }
@@ -2255,7 +2372,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/models.Login"
                         }
                     }
@@ -2648,6 +2764,55 @@
                     "type": "string"
                 },
                 "visible": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.NetWorth": {
+            "type": "object",
+            "properties": {
+                "build_before": {
+                    "description": "成立以来(%)",
+                    "type": "string"
+                },
+                "code": {
+                    "description": "基金代码",
+                    "type": "integer"
+                },
+                "create_by": {
+                    "type": "string"
+                },
+                "id;primary_key": {
+                    "type": "integer"
+                },
+                "last_year": {
+                    "description": "近一年(%)",
+                    "type": "string"
+                },
+                "net_worth": {
+                    "type": "string"
+                },
+                "now_year": {
+                    "description": "今年以来(%)",
+                    "type": "string"
+                },
+                "six_mouth": {
+                    "description": "近六个月(%)",
+                    "type": "string"
+                },
+                "three_muoth": {
+                    "description": "近三个月(%)",
+                    "type": "string"
+                },
+                "unit_worth": {
+                    "description": "单位净值",
+                    "type": "string"
+                },
+                "update_by": {
+                    "type": "string"
+                },
+                "wond_name": {
+                    "description": "基金名称",
                     "type": "string"
                 }
             }

@@ -1,12 +1,15 @@
 package admin
 
 import (
+	"encoding/json"
 	"errors"
+	"github.com/aliyun/alibaba-cloud-sdk-go/services/dysmsapi"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"go-admin/models"
 	"go-admin/tools"
 	"go-admin/tools/app"
+	"log"
 	"net/http"
 )
 
@@ -69,13 +72,140 @@ func DeleteMember(c *gin.Context) {
 	app.OK(c, result, "删除成功")
 }
 
-func InsertMember(c *gin.Context) {
-	var sysuser models.Member
-	err := c.BindWith(&sysuser, binding.JSON)
-	tools.HasError(err, "非法数据格式", 500)
+// @Summary 会员注册
+// @Tags 企业网站接口
+// @Param username query string false "用户名"
+// @Param code query int false "验证码"
+// @Param password query string false "密码"
+// @Param mobile query string false "手机号"
+// @Param email query int false "邮箱"
+// @Success 200 {string} string	"{"code": 200, "message": "注册成功"}"
+// @Router /api/v1/member/register [post]
+func RegisterMember(c *gin.Context) {
+	var member *models.Member
+	err := c.BindWith(&member, binding.JSON)
+	tools.HasError(err, "数据解析失败", -1)
 
-	// sysuser.CreateBy = tools.GetUserIdStr(c)
-	// id, err := sysuser.Insert()
-	// tools.HasError(err, "添加失败", 500)
-	// app.OK(c, id, "添加成功")
+	if member.Mobile == "" || member.Email == "" || member.Password == "" || member.Code == "" {
+		err = errors.New("")
+		tools.HasError(err, "缺省参数", 500)
+	}
+
+	if !tools.VerifyPhone(member.Email) {
+		err := errors.New("")
+		tools.HasError(err, "邮箱格式错误", 500)
+		return
+	}
+
+	if !tools.VerifyPhone(member.Mobile) {
+		err := errors.New("")
+		tools.HasError(err, "手机格式错误", 500)
+		return
+	}
+
+	if m, ok := Code.mobiles[member.Code]; !ok || m != member.Mobile {
+		err = errors.New("")
+		tools.HasError(err, "验证码错误", 500)
+	}
+	id, err := member.Insert()
+	tools.HasError(err, "注册失败", 500)
+	app.OK(c, id, "注册成功")
+}
+
+var Code *AuthCodes
+
+type AuthCodes struct {
+	mobiles map[string]string
+	Ip      map[string]bool
+}
+
+type JsonCode struct {
+	Code string `json:"code"`
+}
+
+// @Summary 发送验证码
+// @Tags 企业网站接口
+// @Param mobile query string false "手机号"
+// @Success 200 {string} string	"{"code": 200, "message": "发送成功"}"
+// @Router /api/v1/sendCode [get]
+func SendCode(c *gin.Context) {
+	mobile := c.Request.FormValue("mobile")
+
+	if mobile == "" {
+		err := errors.New("")
+		tools.HasError(err, "缺省手机参数", 500)
+		return
+	}
+
+	if !tools.VerifyPhone(mobile) {
+		err := errors.New("")
+		tools.HasError(err, "手机格式错误", 500)
+		return
+	}
+
+	ip := c.ClientIP()
+	Code.Ip[ip] = true
+	client, err := dysmsapi.NewClientWithAccessKey("cn-hangzhou", "LTAI4GKEQsffZ8REKwGxwm4J", "FbhXk6nJDHebhMf5GGCD29yFXxCJYK")
+	tools.HasError(err, "初始化失败", 500)
+
+	code := tools.EncodeToString(6)
+	Code.mobiles[code] = mobile
+	request := dysmsapi.CreateSendSmsRequest()
+	request.Scheme = "https"
+	request.PhoneNumbers = mobile
+	request.SignName = "诺游"
+	request.TemplateCode = "SMS_200180609"
+	kv := JsonCode{
+		Code: code,
+	}
+	js, err := json.Marshal(kv)
+	tools.HasError(err, "格式化失败", 500)
+	request.TemplateParam = string(js)
+
+	response, err := client.SendSms(request)
+	if err != nil {
+		tools.HasError(err, "验证码发送成功", 200)
+	}
+	log.Printf("response is %v\n", response.Message)
+	app.OK(c, "", "发送成功")
+
+}
+
+// @Summary 会员登录
+// @Tags 企业网站接口
+// @Param mobile query string false "手机号„"
+// @Param password query string false "密码"
+// @Success 200 {string} string	"{"code": 200, "message": "登录成功"}"
+// @Router /api/v1/member/login [post]
+func Login(c *gin.Context) {
+	var member models.Member
+	err := c.BindWith(&member, binding.JSON)
+	tools.HasError(err, "数据解析失败", -1)
+	if member.Password == "" || member.Mobile == "" || member.Code == "" {
+		err := errors.New("")
+		tools.HasError(err, "缺省参数", 500)
+		return
+	}
+	if m, ok := Code.mobiles[member.Code]; !ok {
+		err := errors.New("")
+		tools.HasError(err, "验证码错误", 500)
+		return
+	} else if m != member.Mobile {
+		err := errors.New("")
+		tools.HasError(err, "验证码错误", 500)
+	}
+
+	err = member.Login()
+	if err != nil {
+		tools.HasError(err, err.Error(), 500)
+	}
+
+	member.Password = ""
+	app.OK(c, member, "success")
+}
+
+func init() {
+	Code = new(AuthCodes)
+	Code.mobiles = make(map[string]string)
+	Code.Ip = make(map[string]bool)
 }

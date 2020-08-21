@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/aliyun/alibaba-cloud-sdk-go v1.61.431
 	github.com/casbin/casbin/v2 v2.2.1
 	github.com/casbin/gorm-adapter/v2 v2.0.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible

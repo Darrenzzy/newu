@@ -1,6 +1,9 @@
 package models
 
 import (
+	"crypto/md5"
+	"errors"
+	"fmt"
 	orm "go-admin/global"
 	"time"
 )
@@ -25,7 +28,7 @@ type Member struct {
 	// Type             int64     `gorm:"column:type" json:"type"`
 	UpdateAt time.Time `gorm:"column:update_at" json:"update_at"`
 	Username string    `gorm:"column:username" json:"username"`
-	// UUID             int64     `gorm:"column:uuid" json:"uuid"`
+	Code     string    `gorm:"-" json:"code"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -98,23 +101,41 @@ func (e *Member) BatchDelete(id []int) (Result bool, err error) {
 }
 
 // 添加
-// func (e Member) Insert() (id int, err error) {
-// 	// if err = e.Encrypt(); err != nil {
-// 	// 	return
-// 	// }
-//
-// 	// check 用户名
-// 	var count int
-// 	orm.Eloquent.Table(e.TableName()).Where("username = ?", e.Username).Count(&count)
-// 	if count > 0 {
-// 		err = errors.New("账户已存在！")
-// 		return
-// 	}
-//
-// 	// 添加数据
-// 	if err = orm.Eloquent.Table(e.TableName()).Create(&e).Error; err != nil {
-// 		return
-// 	}
-// 	id = e.ID
-// 	return
-// }
+func (e *Member) Insert() (id int64, err error) {
+	var count int
+	orm.Eloquent.Table(e.TableName()).Where("mobile = ?", e.Mobile).Count(&count)
+	if count > 0 {
+		err = errors.New("手机号已被注册！")
+		return
+	}
+	e.Password = fmt.Sprintf("%x", md5.Sum([]byte(e.Password)))
+	e.UpdateAt = time.Now()
+	e.CreateAt = time.Now()
+	// 添加数据
+	if err = orm.Eloquent.Table(e.TableName()).Create(&e).Error; err != nil {
+		return
+	}
+	id = e.ID
+	return
+}
+
+func (e *Member) Login() (err error) {
+	mobile := e.Mobile
+	pass := e.Password
+	orm.Eloquent.Table(e.TableName()).Last(&e, "mobile=?", mobile)
+	if e.ID == 0 {
+		err = errors.New("用户不存在")
+		return
+	}
+	md5Password := fmt.Sprintf("%x", md5.Sum([]byte(pass)))
+	if md5Password != e.Password {
+		err = errors.New("密码错误")
+		return
+	}
+	e.UpdateAt = time.Now()
+	if err = orm.Eloquent.Table(e.TableName()).Save(&e).Error; err != nil {
+		return
+	}
+
+	return
+}
