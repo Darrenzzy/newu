@@ -505,9 +505,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "字典数据"
+                    "配置"
                 ],
-                "summary": "添加字典数据",
+                "summary": "添加配置",
                 "parameters": [
                     {
                         "description": "data",
@@ -515,7 +515,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.DictType"
+                            "$ref": "#/definitions/models.SysConfig"
                         }
                     }
                 ],
@@ -1418,6 +1418,39 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/netWorth/list": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "获取当前净值列表",
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "获取净值列表",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.NetWorth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\": \"list\":[...]}",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/operlog": {
             "post": {
                 "security": [
@@ -1974,7 +2007,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/send_code": {
+        "/api/v1/sendCode": {
             "get": {
                 "tags": [
                     "企业网站接口"

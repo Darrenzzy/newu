@@ -18,6 +18,7 @@ func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gi
 	MemberRouter(r)
 	WorthRouter(r)
 	WebRouter(r)
+	MemberTransaction(r)
 	return r
 }
 
@@ -40,11 +41,22 @@ func WebRouter(r *gin.Engine) {
 
 }
 
+// 交易记录
+func MemberTransaction(r *gin.Engine) {
+	v1 := r.Group("/api/v1/member_transaction")
+	v1.GET("/list", admin.GetMemberTransactionList)
+	v1.GET("/data/:id", admin.GetMemberTransaction)
+	v1.PUT("", admin.UpdateMemberTransaction)
+	v1.DELETE("/:id", admin.DeleteMemberTransaction)
+	v1.POST("/add", admin.AddMemberTransaction)
+}
+
 // 净值
 func WorthRouter(r *gin.Engine) {
 	v1 := r.Group("/api/v1/netWorth")
 	v1.PUT("/", admin.UpdateNetWorth)
-	v1.GET("/", admin.GetNetWorth)
+	v1.GET("/data/:id", admin.GetNetWorth)
+	v1.GET("/list", admin.GetNetWorthList)
 	v1.POST("/", admin.InsertNetWorth)
 }
 

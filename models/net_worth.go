@@ -9,7 +9,7 @@ import (
 type NetWorth struct {
 	BuildBefore string `gorm:"column:build_before" json:"build_before"` // 成立以来(%)
 	Code        int    `gorm:"column:code" json:"code"`                 // 基金代码
-	ID          int    `gorm:"column:id;primary_key" json:"id;primary_key"`
+	ID          int64  `gorm:"column:id;primary_key" json:"id;primary_key"`
 	LastYear    string `gorm:"column:last_year" json:"last_year"` // 近一年(%)
 	NetWorth    string `gorm:"column:net_worth" json:"net_worth"`
 	NowYear     string `gorm:"column:now_year" json:"now_year"`       // 今年以来(%)
@@ -38,6 +38,26 @@ func (e *NetWorth) Get() (NetWorth, error) {
 	}
 	return doc, nil
 }
+func (role *NetWorth) GetPage(pageSize int, pageIndex int) ([]NetWorth, int, error) {
+	var doc []NetWorth
+
+	table := orm.Eloquent.Select("*").Table("net_worth")
+
+	var count int
+	if err := table.Order("id desc").Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Error; err != nil {
+		return nil, 0, err
+	}
+	table.Count(&count)
+	return doc, count, nil
+}
+func (e *NetWorth) GetList() ([]*NetWorth, error) {
+	var doc []*NetWorth
+	table := orm.Eloquent.Table(e.TableName())
+	if err := table.Find(&doc).Error; err != nil {
+		return doc, err
+	}
+	return doc, nil
+}
 
 func (e *NetWorth) Update() (update NetWorth, err error) {
 	if err = orm.Eloquent.Table(e.TableName()).First(&update, e.ID).Error; err != nil {
@@ -54,7 +74,7 @@ func (e *NetWorth) Update() (update NetWorth, err error) {
 }
 
 // 添加
-func (e NetWorth) Insert() (id int, err error) {
+func (e NetWorth) Insert() (id int64, err error) {
 
 	e.CreateBy = time.Now().Format("2006-01-02 15:04:05")
 	// 添加数据
