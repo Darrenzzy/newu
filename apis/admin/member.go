@@ -171,6 +171,28 @@ func SendCode(c *gin.Context) {
 
 }
 
+// @Summary 会员重置密码
+// @Tags 企业网站接口
+// @Param mobile query string false "手机号"
+// @Param password query string false "密码"
+// @Success 200 {string} string	"{"code": 200, "message": "重置成功"}"
+// @Router /api/v1/member/reset_pass [post]
+func ResetPass(c *gin.Context) {
+	var member models.Member
+	err := c.BindWith(&member, binding.JSON)
+	tools.HasError(err, "数据解析失败", -1)
+	if member.Password == "" || member.Mobile == "" {
+		// if member.Password == "" || member.Mobile == "" || member.Code == "" {
+		err := errors.New("")
+		tools.HasError(err, "缺省参数", 500)
+		return
+	}
+	err = member.ResetPass()
+	tools.HasError(err, "", 500)
+	member.Password = ""
+	app.OK(c, member, "success")
+}
+
 // @Summary 会员登录
 // @Tags 企业网站接口
 // @Param mobile query string false "手机号„"

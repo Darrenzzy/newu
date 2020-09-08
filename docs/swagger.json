@@ -1088,6 +1088,36 @@
                 }
             }
         },
+        "/api/v1/member/reset_pass": {
+            "post": {
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "会员重置密码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "手机号",
+                        "name": "mobile",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "密码",
+                        "name": "password",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"message\": \"重置成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/menu": {
             "get": {
                 "security": [

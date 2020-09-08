@@ -139,3 +139,19 @@ func (e *Member) Login() (err error) {
 
 	return
 }
+
+func (e *Member) ResetPass() (err error) {
+	mobile := e.Mobile
+	pass := e.Password
+	orm.Eloquent.Table(e.TableName()).Last(&e, "mobile=?", mobile)
+	if e.ID == 0 {
+		err = errors.New("用户不存在")
+		return
+	}
+	e.Password = fmt.Sprintf("%x", md5.Sum([]byte(pass)))
+	e.UpdateAt = time.Now()
+	if err = orm.Eloquent.Table(e.TableName()).Save(&e).Error; err != nil {
+		return
+	}
+	return
+}

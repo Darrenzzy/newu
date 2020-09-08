@@ -31,6 +31,7 @@ func MemberRouter(r *gin.Engine) {
 	v1.DELETE("/:id", admin.DeleteMember)
 	v1.POST("/register", admin.RegisterMember)
 	v1.POST("/login", admin.Login)
+	v1.POST("/reset_pass", admin.ResetPass)
 
 }
 

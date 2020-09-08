@@ -1345,6 +1345,25 @@ paths:
       summary: 会员注册
       tags:
       - 企业网站接口
+  /api/v1/member/reset_pass:
+    post:
+      parameters:
+      - description: 手机号
+        in: query
+        name: mobile
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      responses:
+        "200":
+          description: '{"code": 200, "message": "重置成功"}'
+          schema:
+            type: string
+      summary: 会员重置密码
+      tags:
+      - 企业网站接口
   /api/v1/menu:
     get:
       description: 获取JSON
