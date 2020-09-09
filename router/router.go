@@ -19,6 +19,7 @@ func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gi
 	WorthRouter(r)
 	WebRouter(r)
 	MemberTransaction(r)
+	AppointmentRouter(r)
 	return r
 }
 
@@ -57,8 +58,19 @@ func WorthRouter(r *gin.Engine) {
 	v1 := r.Group("/api/v1/netWorth")
 	v1.PUT("/", admin.UpdateNetWorth)
 	v1.GET("/data/:id", admin.GetNetWorth)
+	v1.DELETE("/:id", admin.DeleteWorth)
 	v1.GET("/list", admin.GetNetWorthList)
 	v1.POST("/", admin.InsertNetWorth)
+}
+
+// 预约
+func AppointmentRouter(r *gin.Engine) {
+	v1 := r.Group("/api/v1/appointment")
+	v1.PUT("/", admin.UpdateAppointment)
+	v1.GET("/data/:id", admin.GetAppointment)
+	v1.DELETE("/:id", admin.DeleteAppointment)
+	v1.GET("/list", admin.GetAppointmentList)
+	v1.POST("/", admin.InsertAppointment)
 }
 
 // 无需认证的路由示例

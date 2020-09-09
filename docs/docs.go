@@ -28,6 +28,39 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/appointment/": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "专户预约表单提交",
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "专户预约表单提交",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Appointment"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\":{}}",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/config": {
             "put": {
                 "security": [
@@ -1045,6 +1078,12 @@ var doc = `{
                         "description": "密码",
                         "name": "password",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "验证码",
+                        "name": "code",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1089,7 +1128,7 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "邮箱",
                         "name": "email",
                         "in": "query"
@@ -2616,6 +2655,38 @@ var doc = `{
                 },
                 "msg": {
                     "description": "消息",
+                    "type": "string"
+                }
+            }
+        },
+        "models.Appointment": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "class": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id;primary_key": {
+                    "type": "integer"
+                },
+                "mobile": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "sex": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "update_by": {
                     "type": "string"
                 }
             }

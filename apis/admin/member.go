@@ -78,7 +78,7 @@ func DeleteMember(c *gin.Context) {
 // @Param code query int false "验证码"
 // @Param password query string false "密码"
 // @Param mobile query string false "手机号"
-// @Param email query int false "邮箱"
+// @Param email query string false "邮箱"
 // @Success 200 {string} string	"{"code": 200, "message": "注册成功"}"
 // @Router /api/v1/member/register [post]
 func RegisterMember(c *gin.Context) {
@@ -91,7 +91,7 @@ func RegisterMember(c *gin.Context) {
 		tools.HasError(err, "缺省参数", 500)
 	}
 
-	if !tools.VerifyPhone(member.Email) {
+	if !tools.VerifyEmail(member.Email) {
 		err := errors.New("")
 		tools.HasError(err, "邮箱格式错误", 500)
 		return
@@ -107,9 +107,10 @@ func RegisterMember(c *gin.Context) {
 		err = errors.New("")
 		tools.HasError(err, "验证码错误", 500)
 	}
-	id, err := member.Insert()
+	_, err = member.Insert()
 	tools.HasError(err, "注册失败", 500)
-	app.OK(c, id, "注册成功")
+	member.Password = ""
+	app.OK(c, member, "注册成功")
 }
 
 var Code *AuthCodes
@@ -197,29 +198,31 @@ func ResetPass(c *gin.Context) {
 // @Tags 企业网站接口
 // @Param mobile query string false "手机号„"
 // @Param password query string false "密码"
+// @Param code query string false "验证码"
 // @Success 200 {string} string	"{"code": 200, "message": "登录成功"}"
 // @Router /api/v1/member/login [post]
 func Login(c *gin.Context) {
 	var member models.Member
 	err := c.BindWith(&member, binding.JSON)
 	tools.HasError(err, "数据解析失败", -1)
-	if member.Password == "" || member.Mobile == "" || member.Code == "" {
+	if (member.Password == "" && member.Code == "") || member.Mobile == "" {
 		err := errors.New("")
-		tools.HasError(err, "缺省参数", 500)
+		tools.HasError(err, "缺省参数", 400)
 		return
 	}
-	if m, ok := Code.mobiles[member.Code]; !ok {
-		err := errors.New("")
-		tools.HasError(err, "验证码错误", 500)
-		return
-	} else if m != member.Mobile {
-		err := errors.New("")
-		tools.HasError(err, "验证码错误", 500)
+	if member.Code != "" {
+		if m, ok := Code.mobiles[member.Code]; !ok {
+			err := errors.New("")
+			tools.HasError(err, "验证码错误", 400)
+			return
+		} else if m != member.Mobile {
+			err := errors.New("")
+			tools.HasError(err, "验证码错误", 400)
+		}
 	}
-
 	err = member.Login()
 	if err != nil {
-		tools.HasError(err, err.Error(), 500)
+		tools.HasError(err, err.Error(), 400)
 	}
 
 	member.Password = ""

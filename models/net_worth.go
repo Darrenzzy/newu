@@ -73,6 +73,14 @@ func (e *NetWorth) Update() (update NetWorth, err error) {
 	return
 }
 
+func (e *NetWorth) BatchDelete(id []int) (Result bool, err error) {
+	if err = orm.Eloquent.Table(e.TableName()).Where("id in (?)", id).Delete(&NetWorth{}).Error; err != nil {
+		return
+	}
+	Result = true
+	return
+}
+
 // 添加
 func (e NetWorth) Insert() (id int64, err error) {
 

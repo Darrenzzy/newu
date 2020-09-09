@@ -12,6 +12,27 @@ definitions:
         description: 消息
         type: string
     type: object
+  models.Appointment:
+    properties:
+      city:
+        type: string
+      class:
+        type: integer
+      email:
+        type: string
+      id;primary_key:
+        type: integer
+      mobile:
+        type: string
+      name:
+        type: string
+      sex:
+        type: string
+      status:
+        type: integer
+      update_by:
+        type: string
+    type: object
   models.DictType:
     properties:
       createBy:
@@ -669,6 +690,26 @@ info:
   title: go-admin API
   version: 1.0.1
 paths:
+  /api/v1/appointment/:
+    post:
+      description: 专户预约表单提交
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Appointment'
+      responses:
+        "200":
+          description: '{"code": 200, "data":{}}'
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - Bearer: []
+      summary: 专户预约表单提交
+      tags:
+      - 企业网站接口
   /api/v1/config:
     put:
       consumes:
@@ -1306,6 +1347,10 @@ paths:
         in: query
         name: password
         type: string
+      - description: 验证码
+        in: query
+        name: code
+        type: string
       responses:
         "200":
           description: '{"code": 200, "message": "登录成功"}'
@@ -1336,7 +1381,7 @@ paths:
       - description: 邮箱
         in: query
         name: email
-        type: integer
+        type: string
       responses:
         "200":
           description: '{"code": 200, "message": "注册成功"}'
