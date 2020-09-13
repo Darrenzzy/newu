@@ -17,6 +17,7 @@ type NetWorth struct {
 	ThreeMuoth  string `gorm:"column:three_muoth" json:"three_muoth"` // 近三个月(%)
 	UnitWorth   string `gorm:"column:unit_worth" json:"unit_worth"`   // 单位净值
 	WondName    string `gorm:"column:wond_name" json:"wond_name"`     // 基金名称
+	DateWorth   string `gorm:"column:date_worth" json:"date_worth"`   // 净值日期
 	CreateBy    string `json:"create_by" gorm:"size:128;"`            //
 	UpdateBy    string `json:"update_by" gorm:"size:128;"`
 }

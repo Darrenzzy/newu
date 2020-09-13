@@ -33,6 +33,21 @@ definitions:
       update_by:
         type: string
     type: object
+  models.Contacts:
+    properties:
+      content:
+        type: string
+      email:
+        type: string
+      id;primary_key:
+        type: integer
+      mobile:
+        type: string
+      status:
+        type: integer
+      update_by:
+        type: string
+    type: object
   models.DictType:
     properties:
       createBy:
@@ -820,6 +835,26 @@ paths:
       summary: 配置列表数据
       tags:
       - 配置
+  /api/v1/contacts:
+    post:
+      description: 联系我们表单提交
+      parameters:
+      - description: body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/models.Contacts'
+      responses:
+        "200":
+          description: '{"code": 200, "data":{}}'
+          schema:
+            $ref: '#/definitions/app.Response'
+      security:
+      - Bearer: []
+      summary: 联系我们
+      tags:
+      - 企业网站接口
   /api/v1/db/columns/page:
     get:
       description: 数据库表列分页列表 / database table column page list
@@ -992,7 +1027,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/models.SysConfig'
+          $ref: '#/definitions/models.DictType'
       responses:
         "200":
           description: '{"code": -1, "message": "添加失败"}'
@@ -1000,9 +1035,9 @@ paths:
             type: string
       security:
       - Bearer: []
-      summary: 添加配置
+      summary: 添加字典数据
       tags:
-      - 配置
+      - 字典数据
     put:
       consumes:
       - application/json

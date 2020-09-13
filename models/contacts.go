@@ -5,25 +5,22 @@ import (
 	"time"
 )
 
-type Appointment struct {
-	City     string    `gorm:"column:city" json:"city"`
-	Class    int64     `gorm:"column:class" json:"class"`
+type Contacts struct {
 	Status   int64     `gorm:"column:status" json:"status"`
 	Email    string    `gorm:"column:email" json:"email"`
 	ID       int64     `gorm:"column:id;primary_key" json:"id;primary_key"`
 	Mobile   string    `gorm:"column:mobile" json:"mobile"`
-	Name     string    `gorm:"column:name" json:"name"`
-	Sex      string    `gorm:"column:sex" json:"sex"`
+	Content  string    `gorm:"column:content" json:"content"`
 	UpdateBy time.Time `gorm:"column:update_by" json:"update_by"`
 }
 
 // TableName sets the insert table name for this struct type
-func (a *Appointment) TableName() string {
-	return "appointment"
+func (a *Contacts) TableName() string {
+	return "contacts"
 }
 
-func (e *Appointment) Get() (Appointment, error) {
-	var doc Appointment
+func (e *Contacts) Get() (Contacts, error) {
+	var doc Contacts
 	table := orm.Eloquent.Table(e.TableName())
 	if e.ID != 0 {
 		table = table.Where("id = ?", e.ID)
@@ -34,10 +31,10 @@ func (e *Appointment) Get() (Appointment, error) {
 	}
 	return doc, nil
 }
-func (role *Appointment) GetPage(pageSize int, pageIndex int) ([]Appointment, int, error) {
-	var doc []Appointment
+func (role *Contacts) GetPage(pageSize int, pageIndex int) ([]Contacts, int, error) {
+	var doc []Contacts
 
-	table := orm.Eloquent.Model(role)
+	table := orm.Eloquent.Select("*").Model(role)
 
 	var count int
 	if err := table.Order("id desc").Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&doc).Error; err != nil {
@@ -46,8 +43,8 @@ func (role *Appointment) GetPage(pageSize int, pageIndex int) ([]Appointment, in
 	table.Count(&count)
 	return doc, count, nil
 }
-func (e *Appointment) GetList() ([]*Appointment, error) {
-	var doc []*Appointment
+func (e *Contacts) GetList() ([]*Contacts, error) {
+	var doc []*Contacts
 	table := orm.Eloquent.Table(e.TableName())
 	if err := table.Find(&doc).Error; err != nil {
 		return doc, err
@@ -55,7 +52,7 @@ func (e *Appointment) GetList() ([]*Appointment, error) {
 	return doc, nil
 }
 
-func (e *Appointment) Update() (update Appointment, err error) {
+func (e *Contacts) Update() (update Contacts, err error) {
 	if err = orm.Eloquent.Table(e.TableName()).First(&update, e.ID).Error; err != nil {
 		return
 	}
@@ -69,8 +66,8 @@ func (e *Appointment) Update() (update Appointment, err error) {
 	return
 }
 
-func (e *Appointment) BatchDelete(id []int) (Result bool, err error) {
-	if err = orm.Eloquent.Table(e.TableName()).Where("id in (?)", id).Delete(&Appointment{}).Error; err != nil {
+func (e *Contacts) BatchDelete(id []int) (Result bool, err error) {
+	if err = orm.Eloquent.Table(e.TableName()).Where("id in (?)", id).Delete(&Contacts{}).Error; err != nil {
 		return
 	}
 	Result = true
@@ -78,7 +75,7 @@ func (e *Appointment) BatchDelete(id []int) (Result bool, err error) {
 }
 
 // 添加
-func (e Appointment) Insert() (id int64, err error) {
+func (e Contacts) Insert() (id int64, err error) {
 	e.UpdateBy = time.Now()
 	e.Status = 1 // 待处理
 	// 添加数据

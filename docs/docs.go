@@ -237,6 +237,39 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/contacts": {
+            "post": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "联系我们表单提交",
+                "tags": [
+                    "企业网站接口"
+                ],
+                "summary": "联系我们",
+                "parameters": [
+                    {
+                        "description": "body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Contacts"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\": 200, \"data\":{}}",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/db/columns/page": {
             "get": {
                 "description": "数据库表列分页列表 / database table column page list",
@@ -538,9 +571,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "配置"
+                    "字典数据"
                 ],
-                "summary": "添加配置",
+                "summary": "添加字典数据",
                 "parameters": [
                     {
                         "description": "data",
@@ -548,7 +581,7 @@ var doc = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.SysConfig"
+                            "$ref": "#/definitions/models.DictType"
                         }
                     }
                 ],
@@ -2681,6 +2714,29 @@ var doc = `{
                     "type": "string"
                 },
                 "sex": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "update_by": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Contacts": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id;primary_key": {
+                    "type": "integer"
+                },
+                "mobile": {
                     "type": "string"
                 },
                 "status": {

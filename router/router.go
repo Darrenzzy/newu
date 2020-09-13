@@ -20,6 +20,7 @@ func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gi
 	WebRouter(r)
 	MemberTransaction(r)
 	AppointmentRouter(r)
+	ContactsRouter(r)
 	return r
 }
 
@@ -70,7 +71,17 @@ func AppointmentRouter(r *gin.Engine) {
 	v1.GET("/data/:id", admin.GetAppointment)
 	v1.DELETE("/:id", admin.DeleteAppointment)
 	v1.GET("/list", admin.GetAppointmentList)
-	v1.POST("/", admin.InsertAppointment)
+	v1.POST("", admin.InsertAppointment)
+}
+
+// 联系我们
+func ContactsRouter(r *gin.Engine) {
+	v1 := r.Group("/api/v1/contacts")
+	v1.PUT("/", admin.UpdateContacts)
+	v1.GET("/data/:id", admin.GetContacts)
+	v1.DELETE("/:id", admin.DeleteContacts)
+	v1.GET("/list", admin.GetContactsList)
+	v1.POST("", admin.InsertContacts)
 }
 
 // 无需认证的路由示例

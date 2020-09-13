@@ -49,6 +49,6 @@ for m in $go_modules; do
 
   scp "$module_name"_linux_amd64.tar.gz root@119.28.10.43:~/projects
 
-  ssh root@119.28.10.43 /root/projects/restart.sh
+  ssh root@119.28.10.43 /root/projects/notice_restart.sh
 
 done
