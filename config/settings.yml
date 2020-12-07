@@ -9,7 +9,7 @@ settings:
     writertimeout: 2
   database:
     driver: mysql
-    source: root:root@tcp(127.0.0.1:23306)/user_center?charset=utf8&parseTime=True&loc=Local&timeout=1000ms
+    source: root:root@tcp(127.0.0.1:3306)/user_center?charset=utf8&parseTime=True&loc=Local&timeout=1000ms
   gen:
     dbname: user_center
     frontpath: ../goadminui/src

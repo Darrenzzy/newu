@@ -39,7 +39,7 @@ for m in $go_modules; do
     exit 1
     ;;
   esac
-
+# 编译
   gox -os="$os" -arch="amd64" -ldflags="-X main.Version=$buildno -X 'main.BT=$(date "+%Y-%m-%d %H:%M:%S")'" $gcflags -output="$dist_dir/{{.Dir}}_{{.OS}}_{{.Arch}}"
   checkresult $?
 
