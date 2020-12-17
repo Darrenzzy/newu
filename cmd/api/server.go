@@ -36,11 +36,10 @@ var (
 			return run()
 		},
 	}
-
-
 )
 
 var echoTimes int
+
 func init() {
 	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "config/settings.yml", "Start server with provided configuration file")
 	StartCmd.PersistentFlags().StringVarP(&port, "port", "p", "8000", "Tcp port server listening on")
@@ -49,13 +48,15 @@ func init() {
 
 func setup() {
 
-	//1. 读取配置
+	// 1. 读取配置
 	config.Setup(configYml)
-	//2. 设置日志
+	// 2. 设置日志
 	logger.Setup()
-	//3. 初始化数据库链接
+	// 3. 初始化数据库链接
 	database.Setup(config.DatabaseConfig.Driver)
-	//4. 接口访问控制加载
+	// 3. 初始化 缓存数据库
+	database.Setup("redis")
+	// 4. 接口访问控制加载
 	mycasbin.Setup()
 
 	usageStr := `starting api server`

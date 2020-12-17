@@ -31,6 +31,11 @@ type NetWorth struct {
 	UpdateBy      string `json:"update_by" gorm:"size:128;"`
 }
 
+type RkData struct {
+	Data  []NetWorth `json:"Data"`
+	Count int        `json:"Count"`
+}
+
 // TableName sets the insert table name for this struct type
 func (n *NetWorth) TableName() string {
 	return "net_worth"

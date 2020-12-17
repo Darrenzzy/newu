@@ -1,9 +1,14 @@
 package admin
 
 import (
+	"context"
+	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/go-kratos/kratos/pkg/cache/redis"
+	"github.com/go-kratos/kratos/pkg/log"
+	"go-admin/global"
 	"go-admin/models"
 	"go-admin/tools"
 	"go-admin/tools/app"
@@ -36,6 +41,16 @@ func GetNetWorth(c *gin.Context) {
 // @Security Bearer
 func GetNetWorthList(c *gin.Context) {
 	var err error
+	saveData := models.RkData{}
+	bs, _ := redis.String(global.Rdb.Do(context.TODO(), "get", "worth_list"))
+	if bs != "" {
+		_ = json.Unmarshal([]byte(bs), &saveData)
+		if saveData.Count > 0 {
+			log.Info("走缓存~")
+			app.PageOK(c, saveData.Data, saveData.Count, 1, 10, "")
+			return
+		}
+	}
 
 	var pageSize = 10
 	var pageIndex = 1
@@ -49,6 +64,12 @@ func GetNetWorthList(c *gin.Context) {
 	var res models.NetWorth
 	list, count, _ := res.GetPage(pageSize, pageIndex)
 	tools.HasError(err, "", -1)
+
+	saveData.Data = list
+	saveData.Count = count
+	str, _ := json.Marshal(saveData)
+	global.Rdb.Do(context.TODO(), "set", "worth_list", string(str))
+
 	app.PageOK(c, list, count, pageIndex, pageSize, "")
 }
 
