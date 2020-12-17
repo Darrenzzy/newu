@@ -86,6 +86,8 @@ func UpdateNetWorth(c *gin.Context) {
 	}
 	data, err = data.Update()
 	tools.HasError(err, "数据不存在", -1)
+	global.Rdb.Do(context.TODO(), "del", "worth_list")
+
 	c.JSON(http.StatusOK, resp.ReturnOK())
 }
 
@@ -95,6 +97,8 @@ func DeleteWorth(c *gin.Context) {
 	IDS := tools.IdsStrToIdsIntGroup("id", c)
 	result, err := data.BatchDelete(IDS)
 	tools.HasError(err, "删除失败", 500)
+	global.Rdb.Do(context.TODO(), "del", "worth_list")
+
 	app.OK(c, result, "删除成功")
 }
 
@@ -105,5 +109,7 @@ func InsertNetWorth(c *gin.Context) {
 	data.CreateBy = tools.GetUserIdStr(c)
 	id, err := data.Insert()
 	tools.HasError(err, "添加失败", 500)
+	global.Rdb.Do(context.TODO(), "del", "worth_list")
+
 	app.OK(c, id, "添加成功")
 }
