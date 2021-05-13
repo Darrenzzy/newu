@@ -11,6 +11,7 @@ type BaseModel struct {
 }
 
 type RkResumeData struct {
+	Name     string `json:"name"`
 	Title    string `json:"title"`
 	Subtitle string `json:"subtitle"`
 	Content  string `json:"content"`
