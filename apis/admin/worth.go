@@ -2,12 +2,13 @@ package admin
 
 import (
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"go-admin/models"
 	"go-admin/tools"
 	"go-admin/tools/app"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 )
 
 // @Summary 获取当前净值
@@ -19,7 +20,7 @@ import (
 // @Security Bearer
 func GetNetWorth(c *gin.Context) {
 	var res models.NetWorth
-	res.ID, _ = tools.StringToInt64(c.Param("id"))
+	res.ID, _ = tools.StringToInt(c.Param("id"))
 	var resp app.Response
 	data, _ := res.Get()
 	resp.Data = data
@@ -81,7 +82,9 @@ func InsertNetWorth(c *gin.Context) {
 	var data models.NetWorth
 	err := c.BindWith(&data, binding.JSON)
 	tools.HasError(err, "非法数据格式", 500)
-	data.CreateBy = tools.GetUserIdStr(c)
+
+	// data.CreateBy = tools.GetUserIdStr(c)
+	// data.CreateBy = data.CreateBy
 	id, err := data.Insert()
 	tools.HasError(err, "添加失败", 500)
 	app.OK(c, id, "添加成功")

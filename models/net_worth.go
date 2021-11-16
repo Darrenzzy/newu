@@ -8,8 +8,8 @@ import (
 // 净值
 type NetWorth struct {
 	BuildBefore string `gorm:"column:build_before" json:"build_before"` // 成立以来(%)
-	Code        int    `gorm:"column:code" json:"code"`                 // 基金代码
-	ID          int64  `gorm:"column:id;primary_key" json:"id;primary_key"`
+	Code        string `gorm:"column:code" json:"code"`                 // 基金代码
+	ID          int    `gorm:"column:id;primary_key" json:"id"`
 	LastYear    string `gorm:"column:last_year" json:"last_year"` // 近一年(%)
 	NetWorth    string `gorm:"column:net_worth" json:"net_worth"`
 	NowYear     string `gorm:"column:now_year" json:"now_year"`       // 今年以来(%)
@@ -17,9 +17,9 @@ type NetWorth struct {
 	ThreeMuoth  string `gorm:"column:three_muoth" json:"three_muoth"` // 近三个月(%)
 	UnitWorth   string `gorm:"column:unit_worth" json:"unit_worth"`   // 单位净值
 	WondName    string `gorm:"column:wond_name" json:"wond_name"`     // 基金名称
-	DateWorth   string `gorm:"column:date_worth" json:"date_worth"`   // 净值日期
-	CreateBy    string `json:"create_by" gorm:"size:128;"`            //
-	UpdateBy    string `json:"update_by" gorm:"size:128;"`
+	DateWorth   time.Time `gorm:"column:date_worth" json:"date_worth"`   // 净值日期
+	CreateBy    time.Time `json:"create_by" gorm:"size:128;"`            //
+	UpdateBy    time.Time `json:"update_by" gorm:"size:128;"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -66,7 +66,8 @@ func (e *NetWorth) Update() (update NetWorth, err error) {
 	}
 
 	// 参数1:是要修改的数据
-	e.UpdateBy = time.Now().Format("2006-01-02 15:04:05")
+	// e.UpdateBy = time.Now().Format("2006-01-02 15:04:05")
+	e.UpdateBy = time.Now()
 	// 参数2:是修改的数据
 	if err = orm.Eloquent.Model(&update).Save(&e).Error; err != nil {
 		return
@@ -83,9 +84,10 @@ func (e *NetWorth) BatchDelete(id []int) (Result bool, err error) {
 }
 
 // 添加
-func (e NetWorth) Insert() (id int64, err error) {
+func (e NetWorth) Insert() (id int, err error) {
 
-	e.CreateBy = time.Now().Format("2006-01-02 15:04:05")
+	e.CreateBy = time.Now()
+	// e.CreateBy = time.Now().Format("2006-01-02 15:04:05")
 	// 添加数据
 	if err = orm.Eloquent.Table(e.TableName()).Create(&e).Error; err != nil {
 		return
