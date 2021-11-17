@@ -3,7 +3,7 @@
 ![build](https://github.com/wenjianzhang/go-admin/workflows/build/badge.svg)   ![license](https://img.shields.io/github/license/mashape/apistatus.svg) 
 
 
- English | [简体中文](./README.zh-CN.md)
+ English | [简体中文](./README.md)
   
 ##### Gin + Vue + Element UI based scaffolding for front and back separation management system
 
@@ -191,4 +191,4 @@ I saw a lot of friends who experience the wrong verification code, so I adjusted
 
 Copyright (c) 2020 wenjianzhang
 
-[中文]qq technical exchange group: 74520518
+【中文】qq technical exchange group: 74520518
