@@ -6,20 +6,26 @@ import (
 )
 
 // 净值
+// 净值
 type NetWorth struct {
-	BuildBefore string `gorm:"column:build_before" json:"build_before"` // 成立以来(%)
-	Code        string `gorm:"column:code" json:"code"`                 // 基金代码
-	ID          int    `gorm:"column:id;primary_key" json:"id"`
-	LastYear    string `gorm:"column:last_year" json:"last_year"` // 近一年(%)
-	NetWorth    string `gorm:"column:net_worth" json:"net_worth"`
-	NowYear     string `gorm:"column:now_year" json:"now_year"`       // 今年以来(%)
-	SixMouth    string `gorm:"column:six_mouth" json:"six_mouth"`     // 近六个月(%)
-	ThreeMuoth  string `gorm:"column:three_muoth" json:"three_muoth"` // 近三个月(%)
-	UnitWorth   string `gorm:"column:unit_worth" json:"unit_worth"`   // 单位净值
-	WondName    string `gorm:"column:wond_name" json:"wond_name"`     // 基金名称
+	BuildBefore string    `gorm:"column:build_before" json:"build_before"` // 成立以来(%)
+	Code        string    `gorm:"column:code" json:"code"`                 // 基金代码
+	ID          int       `gorm:"column:id;primary_key" json:"id"`
+	LastYear    string    `gorm:"column:last_year" json:"last_year"` // 近一年(%)
+	NetWorth    string    `gorm:"column:net_worth" json:"net_worth"`
+	NowYear     string    `gorm:"column:now_year" json:"now_year"`       // 今年以来(%)
+	SixMouth    string    `gorm:"column:six_mouth" json:"six_mouth"`     // 近六个月(%)
+	ThreeMuoth  string    `gorm:"column:three_muoth" json:"three_muoth"` // 近三个月(%)
+	UnitWorth   string    `gorm:"column:unit_worth" json:"unit_worth"`   // 单位净值
+	WondName    string    `gorm:"column:wond_name" json:"wond_name"`     // 基金名称
 	DateWorth   time.Time `gorm:"column:date_worth" json:"date_worth"`   // 净值日期
 	CreateBy    time.Time `json:"create_by" gorm:"size:128;"`            //
 	UpdateBy    time.Time `json:"update_by" gorm:"size:128;"`
+}
+
+type RkData struct {
+	Data  []NetWorth `json:"Data"`
+	Count int        `json:"Count"`
 }
 
 // TableName sets the insert table name for this struct type

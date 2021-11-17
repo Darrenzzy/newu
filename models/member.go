@@ -80,6 +80,15 @@ func (e *Member) Get() (data Member, err error) {
 }
 
 func (e *Member) Update() (update Member, err error) {
+	password := []byte(e.Password)
+
+	if len(password) < 20 {
+		println("修改密码 ：", e.Password)
+		e.Password = fmt.Sprintf("%x", md5.Sum([]byte(e.Password)))
+		println("修改密码 ：", e.Password)
+
+	}
+
 	if err = orm.Eloquent.Table(e.TableName()).First(&update, e.ID).Error; err != nil {
 		return
 	}

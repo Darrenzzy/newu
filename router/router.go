@@ -1,11 +1,12 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
-	_ "github.com/gin-gonic/gin"
 	"go-admin/apis/admin"
 	"go-admin/pkg/jwtauth"
 	jwt "go-admin/pkg/jwtauth"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/gin-gonic/gin"
 )
 
 // 路由示例
@@ -21,6 +22,7 @@ func InitExamplesRouter(r *gin.Engine, authMiddleware *jwt.GinJWTMiddleware) *gi
 	MemberTransaction(r)
 	AppointmentRouter(r)
 	ContactsRouter(r)
+	ResumeBaseRouter(r)
 	return r
 }
 
@@ -82,6 +84,12 @@ func ContactsRouter(r *gin.Engine) {
 	v1.DELETE("/:id", admin.DeleteContacts)
 	v1.GET("/list", admin.GetContactsList)
 	v1.POST("", admin.InsertContacts)
+}
+
+// github 访问接口
+func ResumeBaseRouter(r *gin.Engine) {
+	r.GET("/get_data", admin.GetResumeData)
+	r.POST("/push_data", admin.PushResumeData)
 }
 
 // 无需认证的路由示例
