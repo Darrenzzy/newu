@@ -15,7 +15,7 @@ type Member struct {
 	Email    string    `gorm:"column:email" json:"email"`
 	// EmailAuth        int64     `gorm:"column:email_auth" json:"email_auth"`
 	// GoogleAuthSwitch int64     `gorm:"column:google_auth_switch" json:"google_auth_switch"`
-	ID int64 `gorm:"column:id;primary_key" json:"id;primary_key"`
+	ID int64 `gorm:"column:id;primary_key" json:"id"`
 	// IdentityAuth     int64     `gorm:"column:identity_auth" json:"identity_auth"`
 	// Language         string    `gorm:"column:language" json:"language"`
 	Mobile   string `gorm:"column:mobile" json:"mobile"`
