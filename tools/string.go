@@ -4,11 +4,12 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
 	"io/ioutil"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func StringToInt64(e string) (int64, error) {
@@ -34,6 +35,11 @@ func GetCurrentTime() time.Time {
 func FormatTimeStr(timeStr string) (string, error) {
 	loc, _ := time.LoadLocation("Local")
 	theTime, err := time.ParseInLocation("2006-01-02T15:04:05.000Z", timeStr, loc)
+	return theTime.Format("2006/01/02 15:04:05"), err
+}
+func FormatTimeStrSimple(timeStr string) (string, error) {
+	loc, _ := time.LoadLocation("Local")
+	theTime, err := time.ParseInLocation("2006-01-02", timeStr, loc)
 	return theTime.Format("2006/01/02 15:04:05"), err
 }
 
