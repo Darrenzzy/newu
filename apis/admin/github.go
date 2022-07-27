@@ -4,15 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
-	"github.com/go-kratos/kratos/pkg/cache/redis"
-	"github.com/go-kratos/kratos/pkg/log"
 	"go-admin/global"
 	"go-admin/models"
 	"go-admin/tools"
 	"net/http"
 	"strconv"
+	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
+	"github.com/go-kratos/kratos/pkg/cache/redis"
+	"github.com/go-kratos/kratos/pkg/log"
 )
 
 func PushResumeData(c *gin.Context) {
@@ -31,6 +33,14 @@ func PushResumeData(c *gin.Context) {
 	if saveData.Content == "" || saveData.Title == "" || saveData.Name == "" {
 		err := errors.New("")
 		tools.HasError(err, "缺省参数", -1)
+		c.JSON(http.StatusOK, saveData)
+		return
+	}
+
+	// 防止被刷数据
+	if !strings.Contains(saveData.Subtitle, "rust") {
+		err := errors.New("静止操作")
+		tools.HasError(err, "静止操作", -1)
 		c.JSON(http.StatusOK, saveData)
 		return
 	}
