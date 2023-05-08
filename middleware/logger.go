@@ -38,16 +38,14 @@ func LoggerToFile() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 
 		// 请求IP
-		//clientIP := c.ClientIP()
-		clientIP := ""
-		if ip, _, err := net.SplitHostPort(strings.TrimSpace(c.Request.RemoteAddr)); err == nil {
-			fmt.Println(ip)
-			clientIP = ip
-		}
-
+		clientIP := c.ClientIP()
 		if clientIP == "127.0.0.1" {
 			fmt.Println(c.Request.Header)
 			fmt.Println(c.Request.URL)
+			if ip, _, err := net.SplitHostPort(strings.TrimSpace(c.Request.RemoteAddr)); err == nil {
+				fmt.Println(ip)
+				clientIP = ip
+			}
 		}
 
 		// 日志格式
