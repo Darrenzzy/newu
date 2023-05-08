@@ -7,6 +7,7 @@ import (
 	"go-admin/global"
 	"go-admin/models"
 	"go-admin/tools"
+	"go-admin/tools/config"
 	"net/http"
 	"strconv"
 	"strings"
@@ -23,6 +24,7 @@ func PushResumeData(c *gin.Context) {
 	saveData.Title = c.Request.FormValue("title")
 	saveData.Subtitle = c.Request.FormValue("subtitle")
 	saveData.Content = c.Request.FormValue("content")
+	saveData.AdminPassword = c.Request.FormValue("admin_password")
 	saveData.Show, _ = strconv.Atoi(c.Request.FormValue("show"))
 	saveData.Errno, _ = strconv.Atoi(c.Request.FormValue("errno"))
 	if saveData.Name == "" {
@@ -33,7 +35,12 @@ func PushResumeData(c *gin.Context) {
 	if saveData.Content == "" || saveData.Title == "" || saveData.Name == "" {
 		err := errors.New("")
 		tools.HasError(err, "缺省参数", -1)
-		c.JSON(http.StatusOK, saveData)
+		return
+	}
+	// 防止被刷数据
+	if saveData.AdminPassword != config.Pass {
+		err := errors.New("静止ok")
+		tools.HasError(err, "静止ok", -1)
 		return
 	}
 
@@ -41,7 +48,6 @@ func PushResumeData(c *gin.Context) {
 	if !strings.Contains(saveData.Subtitle, "rust") {
 		err := errors.New("静止操作")
 		tools.HasError(err, "静止操作", -1)
-		c.JSON(http.StatusOK, saveData)
 		return
 	}
 	// 用name 区分不同人的数据

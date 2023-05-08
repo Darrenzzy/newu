@@ -7,6 +7,7 @@ import (
 	"go-admin/models"
 	"go-admin/tools"
 	config2 "go-admin/tools/config"
+	"net"
 	"strings"
 	"time"
 )
@@ -37,7 +38,17 @@ func LoggerToFile() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 
 		// 请求IP
-		clientIP := c.ClientIP()
+		//clientIP := c.ClientIP()
+		clientIP := ""
+		if ip, _, err := net.SplitHostPort(strings.TrimSpace(c.Request.RemoteAddr)); err == nil {
+			fmt.Println(ip)
+			clientIP = ip
+		}
+
+		if clientIP == "127.0.0.1" {
+			fmt.Println(c.Request.Header)
+			fmt.Println(c.Request.URL)
+		}
 
 		// 日志格式
 		fmt.Printf("%s [INFO] %s %s %3d %13v %15s \r\n",

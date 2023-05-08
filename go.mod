@@ -26,6 +26,9 @@ require (
 	github.com/swaggo/swag v1.6.7
 	github.com/unrolled/secure v1.0.8
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+)
+
+require (
 	github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/PuerkitoBio/purell v1.1.1 // indirect

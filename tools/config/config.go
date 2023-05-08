@@ -27,7 +27,10 @@ var cfgSsl *viper.Viper
 // 代码生成配置项 非必须
 var cfgGen *viper.Viper
 
-//载入配置文件
+// 代码生成配置项 非必须
+var Pass string
+
+// 载入配置文件
 func Setup(path string) {
 	viper.SetConfigFile(path)
 	content, err := ioutil.ReadFile(path)
@@ -40,7 +43,7 @@ func Setup(path string) {
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Parse config file fail: %s", err.Error()))
 	}
-
+	Pass = viper.GetString("settings.pass")
 	cfgDatabase = viper.Sub("settings.database")
 	if cfgDatabase == nil {
 		panic("No found settings.database in the configuration")

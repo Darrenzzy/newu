@@ -11,10 +11,11 @@ type BaseModel struct {
 }
 
 type RkResumeData struct {
-	Name     string `json:"name"`
-	Title    string `json:"title"`
-	Subtitle string `json:"subtitle"`
-	Content  string `json:"content"`
-	Show     int    `json:"show"` // 是否后台设置
-	Errno    int    `json:"errno"`
+	Name          string `json:"name"`
+	Title         string `json:"title"`
+	Subtitle      string `json:"subtitle"`
+	Content       string `json:"content"`
+	AdminPassword string `json:"admin_password"`
+	Show          int    `json:"show"` // 是否后台设置
+	Errno         int    `json:"errno"`
 }
