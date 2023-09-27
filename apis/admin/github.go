@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"net/http"
+	"strconv"
+	"strings"
+
 	"go-admin/global"
 	"go-admin/models"
 	"go-admin/tools"
 	"go-admin/tools/config"
-	"net/http"
-	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -78,5 +79,6 @@ func GetResumeData(c *gin.Context) {
 			log.Info("走缓存~")
 		}
 	}
+	saveData.AdminPassword = ""
 	c.JSON(http.StatusOK, saveData)
 }
