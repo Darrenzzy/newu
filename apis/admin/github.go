@@ -55,6 +55,7 @@ func PushResumeData(c *gin.Context) {
 	key := "resume_data_" + saveData.Name
 	bs, _ := json.Marshal(saveData)
 	global.Rdb.Do(context.TODO(), "set", key, string(bs))
+	saveData.AdminPassword = ""
 	c.JSON(http.StatusOK, saveData)
 }
 
