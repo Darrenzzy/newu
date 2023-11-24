@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"go-admin/global"
 	"go-admin/models"
@@ -54,6 +55,14 @@ func PushResumeData(c *gin.Context) {
 	// 用name 区分不同人的数据
 	key := "resume_data_" + saveData.Name
 	bs, _ := json.Marshal(saveData)
+	// 保存老数据
+	resp, err := global.Rdb.Do(context.TODO(), "get", key)
+	if err != nil {
+		log.Error(err.Error())
+	}
+	// oldData := json.Unmarshal([]byte(resp.(string)), &saveData)
+	oldkey := "resume_data_" + saveData.Name + "_" + time.Now().Format("2006-01-02-15:04:05")
+	global.Rdb.Do(context.TODO(), "set", oldkey, resp)
 	global.Rdb.Do(context.TODO(), "set", key, string(bs))
 	saveData.AdminPassword = ""
 	c.JSON(http.StatusOK, saveData)
