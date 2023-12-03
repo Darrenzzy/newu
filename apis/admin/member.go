@@ -3,14 +3,16 @@ package admin
 import (
 	"encoding/json"
 	"errors"
+	"log"
+	"net/http"
+
 	"github.com/aliyun/alibaba-cloud-sdk-go/services/dysmsapi"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/spf13/viper"
 	"go-admin/models"
 	"go-admin/tools"
 	"go-admin/tools/app"
-	"log"
-	"net/http"
 )
 
 func GetMemberList(c *gin.Context) {
@@ -146,7 +148,12 @@ func SendCode(c *gin.Context) {
 
 	ip := c.ClientIP()
 	Code.Ip[ip] = true
-	client, err := dysmsapi.NewClientWithAccessKey("cn-hangzhou", "LTAI4GKEQsffZ8REKwGxwm4J", "FbhXk6nJDHebhMf5GGCD29yFXxCJYK")
+	accessKey := viper.GetString("settings.access_key")
+	accessKeyId := viper.GetString("settings.access_key_id")
+	if len(accessKey) == 0 {
+		tools.HasError(errors.New(""), "access_key 未配置,初始化失败", 500)
+	}
+	client, err := dysmsapi.NewClientWithAccessKey("cn-hangzhou", accessKeyId, accessKey)
 	tools.HasError(err, "初始化失败", 500)
 
 	code := tools.EncodeToString(6)
@@ -156,6 +163,7 @@ func SendCode(c *gin.Context) {
 	request.PhoneNumbers = mobile
 	request.SignName = "诺游"
 	request.TemplateCode = "SMS_200180609"
+	// global.Rdb.Do(context.TODO(), "set", mobile, request)
 	kv := JsonCode{
 		Code: code,
 	}
@@ -165,6 +173,7 @@ func SendCode(c *gin.Context) {
 
 	response, err := client.SendSms(request)
 	if err != nil {
+		log.Println(err.Error())
 		tools.HasError(err, "验证码发送成功", 200)
 	}
 	log.Printf("response is %v\n", response.Message)
