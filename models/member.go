@@ -11,7 +11,7 @@ import (
 type Member struct {
 	// Avatar           string    `gorm:"column:avatar" json:"avatar"`
 	// Country          int64     `gorm:"column:country" json:"country"`
-	CreateAt time.Time `gorm:"column:create_at" json:"create_at"`
+	CreatedAt time.Time `gorm:"column:created_at" json:"created_at"`
 	Email    string    `gorm:"column:email" json:"email"`
 	// EmailAuth        int64     `gorm:"column:email_auth" json:"email_auth"`
 	// GoogleAuthSwitch int64     `gorm:"column:google_auth_switch" json:"google_auth_switch"`
@@ -26,7 +26,7 @@ type Member struct {
 	// SwitchOrder      int64     `gorm:"column:switch_order" json:"switch_order"`
 	// Token            string    `gorm:"column:token" json:"token"`
 	// Type             int64     `gorm:"column:type" json:"type"`
-	UpdateAt time.Time `gorm:"column:update_at" json:"update_at"`
+	UpdatedAt time.Time `gorm:"column:updated_at" json:"updated_at"`
 	Username string    `gorm:"column:username" json:"username"`
 	Code     string    `gorm:"-" json:"code"`
 }
@@ -118,8 +118,8 @@ func (e *Member) Insert() (id int64, err error) {
 		return
 	}
 	e.Password = fmt.Sprintf("%x", md5.Sum([]byte(e.Password)))
-	e.UpdateAt = time.Now()
-	e.CreateAt = time.Now()
+	e.UpdatedAt = time.Now()
+	e.CreatedAt = time.Now()
 	// 添加数据
 	if err = orm.Eloquent.Table(e.TableName()).Create(&e).Error; err != nil {
 		return
@@ -141,7 +141,7 @@ func (e *Member) Login() (err error) {
 		err = errors.New("密码错误")
 		return
 	}
-	e.UpdateAt = time.Now()
+	e.UpdatedAt = time.Now()
 	if err = orm.Eloquent.Table(e.TableName()).Save(&e).Error; err != nil {
 		return
 	}
@@ -158,7 +158,7 @@ func (e *Member) ResetPass() (err error) {
 		return
 	}
 	e.Password = fmt.Sprintf("%x", md5.Sum([]byte(pass)))
-	e.UpdateAt = time.Now()
+	e.UpdatedAt = time.Now()
 	if err = orm.Eloquent.Table(e.TableName()).Save(&e).Error; err != nil {
 		return
 	}
