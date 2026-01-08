@@ -18,7 +18,7 @@ gcflags=''
 if [ "$3" = "prod" ]; then
   gcflags='-gcflags=-trimpath=$GOPATH'
 fi
-
+# 用法 ./deploy.sh newu linux
 for m in $go_modules; do
   cd $GOPATH/src/$m
   count=$(git rev-list HEAD | wc -l | sed -e 's/ *//g' | xargs -n1 printf %04d)
@@ -48,8 +48,8 @@ for m in $go_modules; do
   module_name=$(basename $m)
   tar cvzf "$module_name"_linux_amd64.tar.gz "$module_name"_linux_amd64
 
-  scp "$module_name"_linux_amd64.tar.gz root@119.28.10.43:~/projects
-
-  ssh root@119.28.10.43 /root/projects/restart.sh $module_name
+#   scp "$module_name"_linux_amd64.tar.gz root@119.28.10.43:~/projects
+#
+#   ssh root@119.28.10.43 /root/projects/restart.sh $module_name
 
 done

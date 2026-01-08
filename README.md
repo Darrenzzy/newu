@@ -1,23 +1,9 @@
-<p align="center">
-  <img width="320" src="https://gitee.com/mydearzwj/image/raw/master/img/go-admin.svg">
-</p>
+# go-admin
 
+介绍：这是一个旧项目，运行的目的是维持前端ui请求后台数据的接口， 就没有在newu-go项目下复制了，请移步 newu-go 项目
 
-<p align="center">
-  <a href="https://github.com/wenjianzhang/go-admin">
-    <img src="https://github.com/wenjianzhang/go-admin/workflows/build/badge.svg" alt="go-admin">
-  </a>
-  <a href="https://github.com/wenjianzhang/go-admin">
-    <img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="license">
-  </a>
-    <a href="http://doc.zhangwj.com/go-admin-site/donate/">
-    <img src="https://img.shields.io/badge/%24-donate-ff69b4.svg" alt="donate">
-  </a>
-</p>
-
-
-  [English](https://github.com/wenjianzhang/go-admin/blob/master/README.en.md) | 简体中文
-  
+本项目运行在服务器，9051端口，打包好scp到服务器，restart即可。
+./deploy.sh newu linux
 
 ##### 基于Gin + Vue + Element UI的前后端分离权限管理系统 
 
